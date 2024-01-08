@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 import sim
 import pickle
 
@@ -6,6 +7,7 @@ file = open("model.pkl", "rb")
 MODEL = pickle.load(file)
 
 app = Flask(__name__)
+CORS(app)
 
 @app.get("/sim")
 def index():
