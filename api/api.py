@@ -3,7 +3,7 @@ from flask_cors import CORS
 import sim
 import pickle
 
-file = open("model.pkl", "rb")
+file = open("../model/model.pkl", "rb")
 MODEL = pickle.load(file)
 
 app = Flask(__name__)

@@ -82,8 +82,9 @@ class Innings:
 
         return s
 
-    def sim(self):
+    def sim(self, chasing = 0):
         bowler_idx = 0
+        self.chasing = chasing
 
         while self.ball < 120 and self.wickets < 10:
             self.bowler = self.bowlers[bowler_idx]
@@ -91,7 +92,8 @@ class Innings:
             bowler_idx += 1
             bowler_idx = bowler_idx % 5
 
-        print (self.scorecard())
+            if self.total >= self.chasing and self.chasing != 0:
+                break
 
     def sim_over(self):
         for _ in range(6):
@@ -112,6 +114,9 @@ class Innings:
 
                 self.striker = self.batsmen[self.wickets + 1]
 
+            if self.total >= self.chasing and self.chasing != 0:
+                break
+
         self.striker, self.nonstriker = self.nonstriker, self.striker
 
     def sim_ball(self):
@@ -123,7 +128,8 @@ class Innings:
             self.striker.balls,
             self.bowler.runs,
             self.bowler.balls,
-            self.bowler.wickets
+            self.bowler.wickets,
+            self.chasing
         ]])
 
         outcome = weighted_choice([0,1,2,3,4,6,7], proba[0])
@@ -147,7 +153,7 @@ class Match:
 
     def sim(self):
         self.first_innings.sim()
-        self.second_innings.sim()
+        self.second_innings.sim(self.first_innings.total + 1)
 
     def json(self):
         return {
